@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info:
+  title: Api Documentation
+  description: Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+  version: '1.0'
+servers:
+  - url: http://localhost:8080
+    description: Inferred Url
+tags:
+  - name: message-controller
+    description: Message Controller
+paths:
+  /messages:
+    get:
+      tags:
+        - message-controller
+      summary: Get all messages
+      operationId: getAllMessagesUsingGET
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    post:
+      tags:
+        - message-controller
+      summary: Send message
+      operationId: sendMessageUsingPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '200':
+          description: OK
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /messages/getActivity:
+    get:
+      tags:
+        - message-controller
+      summary: Get id all activity service
+      operationId: getServiceIdsWithActivityStatusUsingGET
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /messages/mesage/{id}:
+    delete:
+      tags:
+        - message-controller
+      summary: Delete message by id
+      operationId: deleteMessageByIdUsingDELETE
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+#  /messages/service/{id}:
+#    delete:
+#      tags:
+#        - message-controller
+#      summary: Delete service by id
+#      operationId: deleteServiceByIdUsingDELETE
+#      parameters:
+#        - name: id
+#          in: query
+#          description: id
+#          required: false
+#          style: form
+#          schema:
+#            type: integer
+#            format: int64
+#      responses:
+#        '200':
+#          description: OK
+#        '204':
+#          description: No Content
+#        '401':
+#          description: Unauthorized
+#        '403':
+#          description: Forbidden
+  /messages/{id}:
+    get:
+      tags:
+        - message-controller
+      summary: Get message by id
+      operationId: getMessageByIdUsingGET
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          style: simple
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+components:
+  schemas:
+    Message:
+      title: Message
+      type: object
+      properties:
+        message:
+          type: string
+        messageId:
+          type: integer
+          format: int64
+        serviceId:
+          $ref: '#/components/schemas/Status'
+        timeStamp:
+          type: string
+          format: date-time
+    Status:
+      title: Status
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        serviceId:
+          type: integer
+          format: int64
+        serviceStatus:
+          type: string
+        time_stamp:
+          type: string
+          format: date-time
